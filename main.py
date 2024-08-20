@@ -2,6 +2,8 @@ import pygame
 from constants import *
 from circleshape import CircleShape
 from player import Player
+from asteroid import Asteroid
+from asteroidfield import AsteroidField
 
 def main():
     pygame.init()
@@ -9,7 +11,18 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
     dt = 0
+    
+    
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+    asteroids = pygame.sprite.Group()
+
+    Player.containers = (updatable, drawable)
+    Asteroid.containers = (asteroids, updatable, drawable)
+    AsteroidField.containers = (updatable)
+
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    asteroidfield = AsteroidField()
 
     while True:
         #check for window closure
@@ -17,11 +30,13 @@ def main():
             if event.type == pygame.QUIT:
                 return
         #check for rotation
-        player.update(dt)
+        for updatee in updatable:
+            updatee.update(dt)
 
         #draw current game state on screen    
         screen.fill((0, 0, 0))
-        player.draw(screen)
+        for drawee in drawable:
+            drawee.draw(screen)
         pygame.display.flip()
 
         #limit framerate to 60 fps
