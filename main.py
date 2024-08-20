@@ -9,13 +9,15 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
     dt = 0
-    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, PLAYER_RADIUS)
+    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
     while True:
         #check for window closure
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
+        #check for rotation
+        player.update(dt)
 
         #draw current game state on screen    
         screen.fill((0, 0, 0))
